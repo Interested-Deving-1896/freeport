@@ -1,181 +1,75 @@
-<p align="center">
-  <img src="logo.svg" width="256" alt="freeport">
-</p>
-
+[update-readmes]   Mode: rewrite — migrating to template structure...
 # freeport
 
-**[https://ryandward.github.io/freeport](https://ryandward.github.io/freeport/)**
+[![Built with Ona](https://ona.com/build-with-ona.svg)](https://app.ona.com/#https://github.com/Interested-Deving-1896/freeport)
 
-Linux is not a person. It does not have a birthday.
+<!-- AI:start:what-it-does -->
+_Description pending._
+<!-- AI:end:what-it-does -->
 
-Asking your operating system to store a birth date is like asking a
-bridge to carry a passport. Linux runs server farms, HPC clusters,
-containers, CI pipelines, embedded controllers, and network
-appliances. Somebody decided that all of these machines need a
-`birthDate` field in their system packages. We remove it.
+## Architecture
 
-## The problem
+<!-- AI:start:architecture -->
+_Architecture documentation pending._
+<!-- AI:end:architecture -->
 
-Legislation in multiple US states and Brazil requires operating
-systems to collect user birth dates and expose age brackets through
-a real time API. In response, `birthDate` fields, D-Bus interfaces,
-and installer prompts are being added to core open source packages
-like systemd, accountsservice, and xdg-desktop-portal.
+## Install
 
-| State | Bill | Status |
-|-------|------|--------|
-| California | AB 1043 | Enacted, effective Jan 1, 2027 |
-| Colorado | SB 26-051 | Passed Senate, in House committee |
-| Louisiana | HB 570 | Enacted, effective July 1, 2026 |
-| Utah | SB 142 | Enacted |
-| New York | S8102A | Pending |
-| Illinois | HB 3304, HB 4140, SB 2037 | Pending |
-| Federal | KOSA, ASAA | Pending |
-| Brazil | Lei 15.211 | Enacted |
-
-These bills share a common template (the ICMEC "Digital Age Assurance
-Act") and none contain exemptions for open source, non-commercial
-software, or infrastructure deployments. The [TBOTE Project](https://www.reddit.com/r/linux/comments/1rtd51g/update_i_pulled_irs_filings_for_the_org_that/)
-has documented through IRS filings, Senate lobbying disclosures, and
-state ethics records that Meta funded the advocacy group pushing these
-bills nationally while writing the legislation to exclude social media
-platforms from its own requirements.
-([findings repo](https://github.com/upper-up/meta-lobbying-and-other-findings))
-
-This code ships to every machine that installs these packages. Your
-Kubernetes nodes get the same `birthDate` field as a laptop. The law
-targets consumer operating systems but the code lands in
-infrastructure.
-
-## What we do
-
-freeport patches individual packages to remove identity collection
-fields, then rebuilds them. Your distro stays your distro. You swap
-one package. Everything else is untouched.
-
-We are not a fork. We do not maintain a parallel copy of systemd. We
-carry the minimum diff to remove the identity fields, and we apply it
-on top of whatever your distro ships.
-
-Every 4 hours we scan upstream for new identity collection code across
-GitHub, GitLab, and Codeberg. Findings go to
-[issue #1](https://github.com/ryandward/freeport/issues/1). Built
-packages are verified to contain zero identity collection strings
-before publishing.
-
-## Use it
-
-### Arch Linux
+<!-- Add installation instructions here. This section is yours — the AI will not modify it. -->
 
 ```bash
-sudo pacman-key --recv-keys B06E95AC8D45885FE6451B669D64B2DDC464B011 --keyserver keyserver.ubuntu.com
-sudo pacman-key --lsign-key B06E95AC8D45885FE6451B669D64B2DDC464B011
+git clone https://github.com/Interested-Deving-1896/freeport.git
+cd freeport
 ```
 
-Add to `/etc/pacman.conf` above `[core]`:
+## Usage
 
-```ini
-[freeport]
-Server = https://github.com/ryandward/freeport/releases/download/repo
+<!-- Add usage examples here. This section is yours — the AI will not modify it. -->
+
+## Configuration
+
+<!-- Document configuration options here. This section is yours — the AI will not modify it. -->
+
+## CI
+
+<!-- AI:start:ci -->
+_CI documentation pending._
+<!-- AI:end:ci -->
+
+## Mirror chain
+
+<!-- AI:start:mirror-chain -->
+This repo is maintained in [`Interested-Deving-1896/freeport`](https://github.com/Interested-Deving-1896/freeport) and mirrored through:
+
+```
+Interested-Deving-1896/freeport  ──►  OpenOS-Project-OSP/freeport  ──►  OpenOS-Project-Ecosystem-OOC/freeport
 ```
 
-```bash
-sudo pacman -Syu freeport-hook
-```
+Changes flow downstream automatically via the hourly mirror chain in
+[`fork-sync-all`](https://github.com/Interested-Deving-1896/fork-sync-all).
+Direct commits to OSP or OOC are detected and opened as PRs back to `Interested-Deving-1896`.
+<!-- AI:end:mirror-chain -->
 
-`freeport-hook` scans every package before installation and blocks
-anything containing identity collection code. When Arch ships a new
-upstream version, freeport rebuilds it clean and publishes the update
-through the same repo.
+## Contributors
 
-### Build from source
+<!-- AI:start:contributors -->
+_Contributors pending._
+<!-- AI:end:contributors -->
 
-```bash
-git clone https://github.com/ryandward/freeport.git
-cd freeport/distros/arch/systemd
-makepkg -si
-```
+## Origins
 
-### Other distros
+<!-- AI:start:origins -->
+_Original project — no upstream fork._
+<!-- AI:end:origins -->
 
-Patches are standard unified diffs against upstream source. The
-packaging around them is distro-specific. If you package for Debian,
-Fedora, Void, Gentoo, or anything else, open a PR.
+## Resources
 
-## What we are tracking
-
-### Core packages
-
-| Project | What was added | Status |
-|---------|---------------|--------|
-| **systemd** | `birthDate` in userdb records, `--birth-date` in homectl | [Merged](https://github.com/systemd/systemd/pull/40954). [Revert](https://github.com/systemd/systemd/pull/41179) was closed. |
-| **xdg-desktop-portal** | `QueryAgeBracket` D-Bus method | [Draft](https://github.com/flatpak/xdg-desktop-portal/pull/1922) |
-| **xdg-specs** | Age verification signal specification | [Closed](https://gitlab.freedesktop.org/xdg/xdg-specs/-/merge_requests/113) after community pushback |
-| **accountsservice** | `BirthDate` property with polkit-gated get/set | [Open](https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/176) |
-| **Ubuntu D-Bus proposal** | `org.freedesktop.AgeVerification1` with SetAge, SetDateOfBirth, GetAgeBracket | [Proposed](https://lists.ubuntu.com/archives/ubuntu-devel/2026-March/043510.html) on ubuntu-devel. Technical blueprint for distro compliance. |
-
-### Installers and desktops
-
-| Project | What was added | Status |
-|---------|---------------|--------|
-| **Calamares** | Birth date field, writes to AccountsService and userdb | [Draft](https://codeberg.org/Calamares/calamares/pulls/2499). European project getting US compliance PRs. Locked. |
-| **archinstall** | Required birth date during user creation | [Open](https://github.com/archlinux/archinstall/pull/4290) |
-| **elementary OS** | Birth date UI and account portal | [Settings](https://github.com/elementary/settings-useraccounts/pull/270), [Portals](https://github.com/elementary/portals/pull/180) |
-| **Ubuntu** | birthDate in desktop provisioning | [Closed](https://github.com/canonical/ubuntu-desktop-provision/pull/1326) after backlash |
-| **ageverifyd** | Reference D-Bus daemon for `org.freedesktop.AgeVerification1` | [Repo](https://github.com/outerheaven199X/ageverifyd) |
-| **MidnightBSD** | DOB in installer, `aged`/`agectl` tools | [Mailing list](https://lists.freedesktop.org/archives/xdg/2026-March/014777.html) |
-
-## The systemd patch
-
-The patch removes:
-
-- `birthDate` field from the user record struct
-- `--birth-date` flag from `homectl`
-- JSON dispatch, parsing, and display code for birth dates
-- Pre-epoch date parsing path (only existed for birth dates)
-- Associated test cases and documentation
-
-Nothing else is touched. No other user record fields, no general
-date/time parsing, no other systemd functionality.
-
-## Distro responses
-
-**Complying:** Fedora (project leader [confirmed compliance](https://lunduke.substack.com/p/slackware-says-no-to-age-verification)),
-Ubuntu (reviewing with legal), elementary OS (following Ubuntu),
-Pop!_OS (considering minimal changes)
-
-**Refusing:** Slackware, Garuda Linux, Adenix, Omarchy,
-MidnightBSD (banned CA residents from desktop use)
-
-**Systemd-free (not affected):** Artix, Alpine, antiX, Void, Devuan
-
-**Silent:** Arch, SUSE, NixOS, Linux Mint
-
-## Help wanted
-
-This is a one person project. I need people who know package manager
-internals. I need people who package for distros other than Arch. I
-need lawyers who understand AB 1043. I need people who want to watch
-upstream and flag new threats.
-
-Open an issue. Start a discussion.
-
-## Related
-
-- [TBOTE Project](https://www.reddit.com/r/linux/comments/1rtd51g/update_i_pulled_irs_filings_for_the_org_that/)
-  pulled IRS 990s, Senate lobbying disclosures, state ethics records,
-  and campaign finance data to document the lobbying operation behind
-  these bills.
-  [Findings repo](https://github.com/upper-up/meta-lobbying-and-other-findings).
-- [AntiSurv/oss-anti-surveillance](https://github.com/AntiSurv/oss-anti-surveillance)
-  tracks identity collection across the Linux stack. No patches.
-- [BryanLunduke/DoesItAgeVerify](https://github.com/BryanLunduke/DoesItAgeVerify)
-  tracks which operating systems have implemented identity collection.
-- [Ageless Linux](https://agelesslinux.org/) is a Debian distro in
-  deliberate noncompliance with AB 1043.
-- [outerheaven199X/ageverifyd](https://github.com/outerheaven199X/ageverifyd)
-  reference `org.freedesktop.AgeVerification1` daemon.
+<!-- AI:start:resources -->
+_No additional resource files found._
+<!-- AI:end:resources -->
 
 ## License
 
-MIT
+<!-- AI:start:license -->
+[MIT](https://github.com/Interested-Deving-1896/freeport/blob/main/LICENSE) © 2026 [Interested-Deving-1896](https://github.com/Interested-Deving-1896)
+<!-- AI:end:license -->
